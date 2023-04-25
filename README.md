@@ -4,4 +4,5 @@ Experimental project to learn how to create Restful API with GO. For the simplic
 
 ### APIs
 
-- **GET /albums:** Return all albums.
+- **GET /albums**: Return all albums.
+- **POST /albums**: Add new album.
