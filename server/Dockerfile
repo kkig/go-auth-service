@@ -14,8 +14,8 @@ RUN go mod download
 # Copy rest of the source cod to image
 COPY *.go ./
 
-# RUN CGO_ENABLED=0 GOOS=linux go build -o /example-crud-go
-RUN go build -o /example-crud-go
+RUN CGO_ENABLED=0 GOOS=linux go build -o /example-crud-go
+# RUN go build -o /example-crud-go
 
 
 # Optional:
