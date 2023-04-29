@@ -1,4 +1,4 @@
-## Authentication Service with GO
+# Authentication Service with GO
 
 Restful API to authenticante/add user with Postgres database.
 
@@ -20,7 +20,7 @@ go work use -r .
 go work sync
 ```
 
-## Start
+### Run Service
 
 Start service in `/auth-service` directory by running:
 
@@ -34,11 +34,12 @@ or
 go run main.go
 ```
 
-## APIs
+### APIs
 
-- **auth/register**: Register new user. Send `username` and `passord` in POST request.
+**auth/register**
+Register new user. Send `username` and `password` in POST request.
 
-### Request:
+Request:
 
 ```
 curl -i -H "Content-Type: application/json" \
@@ -47,30 +48,30 @@ curl -i -H "Content-Type: application/json" \
     http://localhost:8000/auth/register
 ```
 
-### Response:
+Response:
 
 ```
 HTTP/1.1 201 Created
 Content-Type: application/json; charset=utf-8
 Date: Tue, 11 Oct 2022 03:37:08 GMT
 Content-Length: 166
+
 {
 	"user": {
 		"ID": 4,
 		"CreatedAt": "2023-04-29T20:07:06.318028+09:00",
 		"UpdatedAt": "2023-04-29T20:07:06.318028+09:00",
 		"DeletedAt": null,
-		"username": "Pochi",
+		"username": "<USERNAME>",
 		"Entries": null
 	}
 }
 ```
 
-- **auth/login**:
-
+**auth/login**
 Send `username` and `password` with POST request to log in.
 
-### Request:
+Example Request:
 
 ```
 curl -i -H "Content-Type: application/json" \
@@ -79,7 +80,7 @@ curl -i -H "Content-Type: application/json" \
     http://localhost:8000/auth/login
 ```
 
-### Response:
+Example Response:
 
 ```
 HTTP/1.1 200 OK
@@ -87,12 +88,12 @@ Content-Type: application/json; charset=utf-8
 Date: Tue, 11 Oct 2022 03:43:08 GMT
 Content-Length: 147
 
-{"jwt":"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlYXQiOjE2NjU0NjE3ODgsImlhdCI6MTY2NTQ1OTc4OCwiaWQiOjF9.4agGQACwKSZpPCpHeXnoqXfc3WZqYtE8b0SFcoH40uo"}
+{"jwt":"<JSON_WEB_TOKEN_HERE>"}
 ```
 
-## DB
+## Database
 
-This project use [PostgresSQL](https://www.postgresql.org/docs/15/app-createdb.html)(RDBM). If you want to try running this project, database configuration wil be required.
+This project use [PostgresSQL](https://www.postgresql.org/docs/15/app-createdb.html) (RDBM). If you want to try running this project, database configuration wil be required.
 
 Create database with:
 
