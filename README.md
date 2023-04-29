@@ -22,7 +22,7 @@ go work sync
 
 ### Run Service
 
-Start service in `/auth-service` directory by running:
+Start service in `/auth-service/lib` directory by running:
 
 ```
 go run .
