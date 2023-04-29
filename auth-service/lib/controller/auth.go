@@ -1,8 +1,8 @@
 package controller
 
 import (
-	"diary_api/lib/helper"
-	"diary_api/lib/model"
+	"diary_api/helper"
+	"diary_api/model"
 
 	"net/http"
 

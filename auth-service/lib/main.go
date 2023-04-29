@@ -1,9 +1,9 @@
 package main
 
 import (
-	"diary_api/lib/controller"
-	"diary_api/lib/db"
-	"diary_api/lib/model"
+	"diary_api/controller"
+	"diary_api/db"
+	"diary_api/model"
 
 	"fmt"
 	"log"
@@ -19,7 +19,7 @@ func main() {
 }
 
 func loadEnv() {
-	err := godotenv.Load(".env.local")
+	err := godotenv.Load("../.env.local")
 	if err != nil {
 		log.Fatal("Error loading .env file!")
 	}

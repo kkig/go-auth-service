@@ -1,5 +1,5 @@
 go 1.20
 
-use .
+use ./lib
 
 // replace github.com/tidwall/btree v1.1.0 => github.com/tidwall/btree v1.1.1-0.20220220161908-7bec22d8e3fa

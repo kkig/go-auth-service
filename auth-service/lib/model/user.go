@@ -4,7 +4,7 @@ import (
 	"html"
 	"strings"
 
-	"diary_api/lib/db"
+	"diary_api/db"
 
 	"golang.org/x/crypto/bcrypt"
 	"gorm.io/gorm"

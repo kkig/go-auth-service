@@ -1,7 +1,7 @@
 package helper
 
 import (
-	"diary_api/lib/model"
+	"diary_api/model"
 
 	"github.com/golang-jwt/jwt/v4"
 

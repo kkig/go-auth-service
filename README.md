@@ -1,4 +1,4 @@
-# Authentication Service with GO
+## Authentication Service with GO
 
 Restful API to authenticante/add user with Postgres database.
 
@@ -11,12 +11,12 @@ Starting with Go 1.18, using go.work is recommended for multi-module workspaces.
 go work init
 
 # Add directory to go.work
-go work use ./dir
+go work use ./dir/to/goMod
 
 # Recursively add all directories to go.work
 go work use -r .
 
-# Pushes the dependencies in go.work file back into go.mod
+# Run in the directory with go.work to push the dependencies in go.work file back into go.mod
 go work sync
 ```
 
