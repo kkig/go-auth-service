@@ -36,7 +36,8 @@ go run main.go
 
 ### APIs
 
-**auth/register**
+**auth/register:**
+
 Register new user. Send `username` and `password` in POST request.
 
 Request:
@@ -68,7 +69,8 @@ Content-Length: 166
 }
 ```
 
-**auth/login**
+**auth/login:**
+
 Send `username` and `password` with POST request to log in.
 
 Example Request:
