@@ -12,11 +12,13 @@ import (
 // Function to generate JWT tokens.
 
 // header, payload -> base64 encoding (In this case, map[string]string)
-// signature -> encrypted with private key
+// signature -> encrypted with SHA256 or other algorithm with private key
 
 // encrypt the header and payload together using a secret key to get signature
 // Validate token, decode header and payload. Then combine them to create new signature
 // If this matches the signature present in the token, token is valid.
+
+// var privateKey = []byte(os.Getenv(""))
 
 func GenerateToken(header string, payload map[string]string, secret string) (string, error) {
 	// Create a new hash, type sha256. We will pass secret to it.
@@ -50,6 +52,8 @@ func GenerateToken(header string, payload map[string]string, secret string) (str
 
 // This helps in validating token
 func ValidateToken(token string, secret string) (bool, error) {
+	// strings -> package to manipulate UTF-8 encoded strings
+
 	// JWT has 3 parts separated by '.'
 	splitToken := strings.Split(token, ".")
 

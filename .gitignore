@@ -1,4 +1,4 @@
-auth-service/.env*
+*/.env*
 
 
 .DS_Store

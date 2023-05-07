@@ -93,7 +93,7 @@ func (u *User) ValidatePassHash(pwdhash string) bool {
 func AddUser(email string, username string, pass string, fullname string, role int) bool {
 	// Query user data with condition
 	var user User
-	err := db.Where("Email = ?", email).First(&user).Error
+	err := db.Where("Email = ? OR Username = ?", email, username).First(&user).Error
 	if err != nil {
 		return false
 	}
