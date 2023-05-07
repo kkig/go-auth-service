@@ -100,5 +100,5 @@ This project use [PostgresSQL](https://www.postgresql.org/docs/15/app-createdb.h
 Create database with:
 
 ```
-createdb diary_app
+createdb auth_user
 ```
