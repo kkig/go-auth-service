@@ -1,29 +1,29 @@
 package main
 
 import (
-	"auth_service/lib/data"
+	// "auth_service/lib/data"
 	// "auth_service/lib/controller"
 
 	"fmt"
-	"log"
+	// "log"
 	// "os"
 
 	"github.com/gin-gonic/gin"
-	"github.com/joho/godotenv"
+	// "github.com/joho/godotenv"
 )
 
 func main() {
-	loadEnv()
-	data.Connect()
+	// loadEnv()
+	// data.Connect()
 	serveApplication()
 }
 
-func loadEnv() {
-	err := godotenv.Load("./.env.local")
-	if err != nil {
-		log.Fatal("Error loading .env file.")
-	}
-}
+// func loadEnv() {
+// 	err := godotenv.Load("./.env")
+// 	if err != nil {
+// 		log.Fatal("Error loading .env file")
+// 	}
+// }
 
 func serveApplication() {
 	port := ":8000"
