@@ -30,7 +30,7 @@ COPY --from=build-stage /go-auth-service /go-auth-service
 # To bind to a TCP port, runtime parameters must be supplied to the docker command.
 # But we can (optionally) document in the Dockerfile what ports
 # the application is going to listen on by default.
-EXPOSE 8000
+EXPOSE 8080
 
 USER nonroot:nonroot
 

@@ -7,8 +7,13 @@ import (
 	"fmt"
 	"os"
 
-	"gorm.io/gorm"
+	// "log"
+	"time"
+
 	"gorm.io/driver/postgres"
+
+	"gorm.io/gorm"
+	// "gorm.io/driver/postgres"
 )
 
 // By default, GORM pluralizes struct name to snake_cases as table name
@@ -51,36 +56,50 @@ type User struct {
 var db *gorm.DB
 
 func Connect() {
-	var err error
-	// host		:= os.Getenv("DB_HOST")
-	// username	:= os.Getenv("DB_USER")
-	// password	:= os.Getenv("DB_PASSWORD")
-	dbName		:= os.Getenv("DB_NAME")
-	// port		:= os.Getenv("DB_PORT")
+    var err error
+    // host := os.Getenv("ROACH_DB_HOST")
+	// port := os.Getenv("ROACH_DB_PORT")
+	// dbName := os.Getenv("ROACH_DB_DATABASE")
+    // user := os.Getenv("ROACH_DB_USER")
+    // password := os.Getenv("ROACH_DB_PASS")	
 
-	// dsn := fmt.Sprintf("host=localhost password=%s dbname=%s", password, databaseName)
-	dsn := fmt.Sprintf("dbname=%s", dbName)
-	DB, err := gorm.Open(postgres.Open(dsn), &gorm.Config{})
+	user := os.Getenv("DB_USER")
+	dbName := os.Getenv("DB_NAME")
+	pass := os.Getenv("DB_PASSWORD")
 
+
+	// roach_user := os.Getenv("ROACH_USER")
+	// roach_pass := os.Getenv("ROACH_DB_PASS")
+
+	dsn := fmt.Sprintf("user=%s password=%s dbname=%s",user, pass, dbName)
+	// dsn := fmt.Sprintf("host=%s port=%s dbname=%s user=%s password=%s sslmode=disable", host, port, dbName, user, password)
+
+	// dsn := fmt.Sprintf("postgresql://%s:%s@sad-liger-4703.6xw.cockroachlabs.cloud:26257/authUser?sslmode=verify-full", roach_user, roach_pass)
+	db, err := gorm.Open(postgres.Open(dsn), &gorm.Config{})
 	if err != nil {
 		panic(err)
 	} else {
 		fmt.Println("Successfully connected to database!")
 	}
 
-	DB.AutoMigrate(&User{})
+	var now time.Time
+	db.Raw("SELECT NOW()").Scan(&now)
+
+	db.AutoMigrate(&User{})
+
+	fmt.Println(now)
 }
 
 
 
-func FindUserByEmail(email string) (User, bool) {
+func FindUserByEmail(email string) (User, error) {
 	var user User
 	err := db.Where("email = ?", email).First(&user).Error
 	if err != nil {
-		return User{}, false
+		return User{}, err
 	}
 
-	return user, true
+	return user, nil
 }
 
 
