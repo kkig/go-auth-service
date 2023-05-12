@@ -21,6 +21,7 @@ type User struct {
 	Username		string	`gorm:"size:255;not null;"`
 	PasswordHash	string	`gorm:"size:255;not null"`
 	Fullname		string
+
 	Role			int
 	// Age      		int64	`gorm:"column:age_of_the_beast"` // set name to `age_of_the_beast`
 }

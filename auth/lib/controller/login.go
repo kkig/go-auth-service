@@ -4,8 +4,8 @@ import (
 	// "errors"
 	"fmt"
 	"net/http"
-	"time"
 	"os"
+	"time"
 
 	"auth_service/lib/data"
 	"auth_service/lib/jwt"
@@ -30,7 +30,7 @@ func getSignedToken() (string, error) {
 	// This should be passed as System Environment variable
 	secret := os.Getenv("JWT_PRIVATE_KEY")
 	header := "HS256"
-	tokenString, err := jwt.GenerateToken(header, claimsMap, secret)
+	tokenString, err := jwt.GenerateJWT(header, claimsMap, secret)
 	if err != nil {
 		return tokenString, err
 	}
