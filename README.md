@@ -16,9 +16,14 @@ go work use ./dir/to/goMod
 # Recursively add all directories to go.work
 go work use -r .
 
-# Run in the directory with go.work to push the dependencies in go.work file back into go.mod
+# Run in the directory with go.work
+# to push the dependencies in go.work file back into go.mod
 go work sync
 ```
+
+### Database set up
+
+Before running service, please create network bridge and volume container.
 
 ### Run Service
 
@@ -91,14 +96,4 @@ Date: Tue, 11 Oct 2022 03:43:08 GMT
 Content-Length: 147
 
 {"jwt":"<JSON_WEB_TOKEN_HERE>"}
-```
-
-## Database
-
-This project use [PostgresSQL](https://www.postgresql.org/docs/15/app-createdb.html) (RDBM). If you want to try running this project, database configuration wil be required.
-
-Create database with:
-
-```
-createdb auth_user
 ```

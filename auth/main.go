@@ -1,32 +1,36 @@
 package main
 
 import (
-	"auth_service/lib/data"
 	"auth_service/lib/controller"
+	"auth_service/lib/data"
 
 	"fmt"
+	"os"
 
 	"github.com/gin-gonic/gin"
-
-	"github.com/joho/godotenv"
-	"log"
+	// "github.com/joho/godotenv"
+	// "log"
 )
 
 func main() {
-	loadEnv()
+	// loadEnv()
 	data.Connect()
 	serveApplication()
 }
 
-func loadEnv() {
-	err := godotenv.Load("./.env")
-	if err != nil {
-		log.Fatal("Error loading .env file")
-	}
-}
+// func loadEnv() {
+// 	err := godotenv.Load("./.env")
+// 	if err != nil {
+// 		log.Fatal("Error loading .env file")
+// 	}
+// }
 
 func serveApplication() {
-	port := ":8080"
+	httpPort := os.Getenv("HTTP_PORT")
+	if httpPort == "" {
+		httpPort = ":8080"
+	}
+
 	router := gin.Default()
 
 	v1 := router.Group("/auth")
@@ -35,14 +39,14 @@ func serveApplication() {
 		// v1.POST("/login", controller.LoginHandler)
 	
 		// Test
-		v1.GET("/ping", func(cx *gin.Context) {
-			cx.JSON(200, gin.H{
+		v1.GET("/ping", func(ctx *gin.Context) {
+			ctx.JSON(200, gin.H{
 				"message": "pong!",
 			})
 		})		
 	}
 
-	router.Run(port)
-	fmt.Println("Server running on " + port)
+	router.Run(httpPort)
+	fmt.Println("Server running on " + httpPort)
 }
 

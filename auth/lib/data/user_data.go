@@ -1,4 +1,4 @@
-// You shouldn’t export the whole user list outside this package 
+// You shouldn’t export the whole user list outside this package
 // to keep the module loosely coupled as microservice.
 
 package data
@@ -13,23 +13,14 @@ import (
 	"gorm.io/driver/postgres"
 
 	"gorm.io/gorm"
-	// "gorm.io/driver/postgres"
 )
 
-// By default, GORM pluralizes struct name to snake_cases as table name
-// snake_case as column name
-// and uses CreatedAt, UpdatedAt to track creating/updating time
 type User struct {
-	// gorm.Model will include ID, CreatedAt, UpdatedAt, DeletedAt
 	gorm.Model
 	Email			string	`gorm:"size:255;not null;unique"`
-	Username		string	`gorm:"size:255;not null;`
-	// Password should be hashed on client 
-	// In case of security breach, only hashed pass will be revealed
+	Username		string	`gorm:"size:255;not null;"`
 	PasswordHash	string	`gorm:"size:255;not null"`
 	Fullname		string
-	// Based on role level for authentication	
-	// e.g. 0=standerd 1=admin
 	Role			int
 	// Age      		int64	`gorm:"column:age_of_the_beast"` // set name to `age_of_the_beast`
 }
@@ -63,9 +54,9 @@ func Connect() {
     // user := os.Getenv("ROACH_DB_USER")
     // password := os.Getenv("ROACH_DB_PASS")	
 
-	user := os.Getenv("DB_USER")
-	dbName := os.Getenv("DB_NAME")
-	pass := os.Getenv("DB_PASSWORD")
+	dbName := os.Getenv("PGDATABASE")
+	user := os.Getenv("PGUSER")
+	pass := os.Getenv("PGPASSWORD")
 
 
 	// roach_user := os.Getenv("ROACH_USER")
@@ -104,8 +95,8 @@ func FindUserByEmail(email string) (User, error) {
 
 
 // Check if the password hash is valid
-func (u *User) ValidatePassHash(pwdhash string) bool {
-	return u.PasswordHash == pwdhash
+func (user *User) ValidatePassHash(pwdhash string) bool {
+	return user.PasswordHash == pwdhash
 }
 
 // Add user

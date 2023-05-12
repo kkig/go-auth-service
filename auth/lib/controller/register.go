@@ -8,12 +8,12 @@ import (
 )
 
 // Add a user to database
-func RegisterUser(ct *gin.Context) {
+func RegisterUser(ctx *gin.Context) {
 	var userInput data.User
 
 	// Extra error handling should be done on server to prevent malicious attacks
-	if err := ct.ShouldBindJSON(&userInput); err != nil {
-		ct.JSON(http.StatusBadRequest, gin.H{"err": err.Error()})
+	if err := ctx.ShouldBindJSON(&userInput); err != nil {
+		ctx.JSON(http.StatusBadRequest, gin.H{"err": err.Error()})
 		return
 	}
 
@@ -22,9 +22,9 @@ func RegisterUser(ct *gin.Context) {
 
 	// User was already in database
 	if !isAdded {
-		ct.JSON(http.StatusConflict, gin.H{"status": "Email or Username aldready exists."})
+		ctx.JSON(http.StatusConflict, gin.H{"status": "Email or Username aldready exists."})
 		return
 	}
 
-	ct.JSON(http.StatusOK, gin.H{"status": "User Created."})
+	ctx.JSON(http.StatusOK, gin.H{"status": "User Created."})
 }
