@@ -4,7 +4,6 @@ import (
 	"auth_service/lib/controller"
 	"auth_service/lib/data"
 
-	"fmt"
 	"os"
 
 	"github.com/gin-gonic/gin"
@@ -28,7 +27,7 @@ func main() {
 func serveApplication() {
 	httpPort := os.Getenv("HTTP_PORT")
 	if httpPort == "" {
-		httpPort = ":8080"
+		httpPort = "8080"
 	}
 
 	router := gin.Default()
@@ -46,7 +45,6 @@ func serveApplication() {
 		})		
 	}
 
-	router.Run(httpPort)
-	fmt.Println("Server running on " + httpPort)
+	router.Run()
 }
 

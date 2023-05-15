@@ -25,33 +25,58 @@ go work sync
 
 Before running service, please create network bridge and volume container.
 
-### Run Service
-
-Start service in `/auth-service/lib` directory by running:
+Create volume container:
 
 ```
-go run .
+docker volume create [container name]
 ```
 
-or
+Create bridge network:
 
 ```
-go run main.go
+docker network create -d bridge [network name]
+```
+
+Build and run containers:
+
+```
+docker-compose up --build
+```
+
+or run in detached mode:
+
+```
+docker-compose up --build -d
+```
+
+For the intial set up, log into the database engine:
+
+```
+docker exec -it [volume container name] ./cockroach sql --insecure
+```
+
+and create database and user:
+
+```
+CREATE DATABASE [db name];
+CREATE USER [user name];
+GRANT ALL ON DATABASE [db name] TO [user name];
+quit
 ```
 
 ### APIs
 
 **auth/register:**
 
-Register new user. Send `username` and `password` in POST request.
+Register new user. Send `email` and `password` in POST request.
 
 Request:
 
 ```
 curl -i -H "Content-Type: application/json" \
     -X POST \
-    -d '{"username":"<USERNAME>", "password":"<PASSWORD>"}' \
-    http://localhost:8000/auth/register
+    -d '{"email":"<USER_EMAIL>", "password":"<PASSWORD_HASH>"}' \
+    http://localhost/auth/register
 ```
 
 Response:
@@ -64,12 +89,12 @@ Content-Length: 166
 
 {
 	"user": {
-		"ID": 4,
+		"ID": 865367747815407777,
 		"CreatedAt": "2023-04-29T20:07:06.318028+09:00",
 		"UpdatedAt": "2023-04-29T20:07:06.318028+09:00",
 		"DeletedAt": null,
 		"username": "<USERNAME>",
-		"Entries": null
+		"Role": 0
 	}
 }
 ```

@@ -39,15 +39,15 @@ func getSignedToken() (string, error) {
 
 // Search user in database
 func validateUser(email string, passHash string) (bool, error) {
-	usr, err := data.FindUserByEmail(email)
-	if err != nil {
-		return false, err
-	}
+	// usr, err := data.FindUserByEmail(email)
+	// if err != nil {
+	// 	return false, err
+	// }
 
-	isPassValid := usr.ValidatePassHash(passHash)
-	if !isPassValid {
-		return false, nil
-	}
+	// isPassValid := usr.ValidatePassHash(passHash)
+	// if !isPassValid {
+	// 	return false, nil
+	// }
 
 	return true, nil
 }

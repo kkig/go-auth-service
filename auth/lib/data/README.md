@@ -21,6 +21,6 @@ By default, GORM pluralizes struct name to snake_cases as table name snake_case 
 
 `gorm.Model`: Include ID, CreatedAt, UpdatedAt, DeletedAt
 `PasswordHash`: Password should be hashed on client. In case of security breach, only hashed pass will be revealed.
-`Role`: Used to define authentication levels and priority.(e.g. `0=standerd` `1=admin`)
+`Role`: Used to define authentication levels and priority.(e.g. `0=standard` `1=admin`)
 
 **Note**: Don't export whole list of users outside this package.

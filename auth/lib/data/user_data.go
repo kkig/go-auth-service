@@ -5,25 +5,25 @@ package data
 
 import (
 	"fmt"
+	"log"
 	"os"
-
-	// "log"
 	"time"
 
 	"gorm.io/driver/postgres"
-
 	"gorm.io/gorm"
+	"gorm.io/gorm/logger"
 )
 
 type User struct {
 	gorm.Model
-	Email			string	`gorm:"size:255;not null;unique"`
-	Username		string	`gorm:"size:255;not null;"`
-	PasswordHash	string	`gorm:"size:255;not null"`
-	Fullname		string
-
+	Email			string	`gorm:"size:255;not null;unique" json:"email"`
+	PasswordHash	string	`gorm:"size:255;" json:"-"` // json:"-" ensures password won't be returned in JSON response
 	Role			int
-	// Age      		int64	`gorm:"column:age_of_the_beast"` // set name to `age_of_the_beast`
+}
+
+type NewUserInput struct {
+	Email			string	`json:"email" binding:"required"`
+	PasswordHash	string	`json:"password" binding:"required"`
 }
 
 // var userList = []user{
@@ -49,44 +49,44 @@ var db *gorm.DB
 
 func Connect() {
     var err error
-    // host := os.Getenv("ROACH_DB_HOST")
-	// port := os.Getenv("ROACH_DB_PORT")
-	// dbName := os.Getenv("ROACH_DB_DATABASE")
-    // user := os.Getenv("ROACH_DB_USER")
-    // password := os.Getenv("ROACH_DB_PASS")	
-
+	newLogger := logger.New(
+		log.New(os.Stdout, "\r\n", log.LstdFlags), // io writer
+		logger.Config{
+		  SlowThreshold:              time.Second,   // Slow SQL threshold
+		  LogLevel:                   logger.Silent, // Log level
+		  IgnoreRecordNotFoundError: true,           // Ignore ErrRecordNotFound error for logger
+		  ParameterizedQueries:      true,           // Don't include params in the SQL log
+		  Colorful:                  false,          // Disable color
+		},
+	)
+	
 	dbName := os.Getenv("PGDATABASE")
+    host := os.Getenv("PGHOST")
+	port := os.Getenv("PGPORT")
 	user := os.Getenv("PGUSER")
 	pass := os.Getenv("PGPASSWORD")
 
-
-	// roach_user := os.Getenv("ROACH_USER")
-	// roach_pass := os.Getenv("ROACH_DB_PASS")
-
-	dsn := fmt.Sprintf("user=%s password=%s dbname=%s",user, pass, dbName)
-	// dsn := fmt.Sprintf("host=%s port=%s dbname=%s user=%s password=%s sslmode=disable", host, port, dbName, user, password)
+	// dsn := fmt.Sprintf("user=%s dbname=%s",user, dbName)
+	dsn := fmt.Sprintf("host=%s port=%s dbname=%s user=%s password=%s sslmode=disable", host, port, dbName, user, pass)
 
 	// dsn := fmt.Sprintf("postgresql://%s:%s@sad-liger-4703.6xw.cockroachlabs.cloud:26257/authUser?sslmode=verify-full", roach_user, roach_pass)
-	db, err := gorm.Open(postgres.Open(dsn), &gorm.Config{})
+	db, err = gorm.Open(postgres.Open(dsn), &gorm.Config{Logger: newLogger,})
+	
 	if err != nil {
 		panic(err)
-	} else {
-		fmt.Println("Successfully connected to database!")
 	}
 
-	var now time.Time
-	db.Raw("SELECT NOW()").Scan(&now)
-
+	// Migrate schema change if any - Create table if it doesn't exist.
 	db.AutoMigrate(&User{})
 
-	fmt.Println(now)
+	fmt.Println("Connected to server!")
+
 }
-
-
 
 func FindUserByEmail(email string) (User, error) {
 	var user User
 	err := db.Where("email = ?", email).First(&user).Error
+	// err := db.Where("Email = ? OR Username = ?", email, username).First(&user).Error
 	if err != nil {
 		return User{}, err
 	}
@@ -95,33 +95,21 @@ func FindUserByEmail(email string) (User, error) {
 }
 
 
+// Add user
+func (user *User) AddUser () (*User, error) {	
+	err := db.Create(&user).Error
+
+	if err != nil {
+		return &User{}, err
+	}
+
+	return user, nil
+}
+
 // Check if the password hash is valid
 func (user *User) ValidatePassHash(pwdhash string) bool {
 	return user.PasswordHash == pwdhash
 }
-
-// Add user
-func AddUser(email string, username string, pass string, fullname string, role int) bool {
-	// Query user data with condition
-	var user User
-	err := db.Where("Email = ? OR Username = ?", email, username).First(&user).Error
-	if err != nil {
-		return false
-	}
-	
-	newUser := User{
-		Email:			email,
-		Username:		username,
-		PasswordHash:	pass,
-		Fullname:		fullname,
-		Role:			role,
-	}
-
-	db.Create(&newUser)
-	return true
-}
-
-
 
 
 

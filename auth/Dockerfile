@@ -1,6 +1,6 @@
 # syntax=docker/dockerfile:1
 
-# Build the application from source
+# Build the application from source - version should match with go.mod
 FROM golang:1.20.3-bullseye AS build-stage
 
 # Set destination for COPY
