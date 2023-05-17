@@ -19,7 +19,7 @@ type User struct {
 	gorm.Model
 	Email			string	`gorm:"size:255;not null;unique" json:"email"`
 	Password		string	`gorm:"size:255;not null;" json:"-"` // json:"-" ensures password won't be returned in JSON response
-	Role			int
+	Role			uint
 }
 
 type LoginUserInput struct {
