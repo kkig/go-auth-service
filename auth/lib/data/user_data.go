@@ -9,6 +9,7 @@ import (
 	"os"
 	"time"
 
+	"golang.org/x/crypto/bcrypt"
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
 	"gorm.io/gorm/logger"
@@ -17,33 +18,23 @@ import (
 type User struct {
 	gorm.Model
 	Email			string	`gorm:"size:255;not null;unique" json:"email"`
-	PasswordHash	string	`gorm:"size:255;" json:"-"` // json:"-" ensures password won't be returned in JSON response
+	Password		string	`gorm:"size:255;not null;" json:"-"` // json:"-" ensures password won't be returned in JSON response
 	Role			int
 }
 
-type NewUserInput struct {
+type LoginUserInput struct {
 	Email			string	`json:"email" binding:"required"`
-	PasswordHash	string	`json:"password" binding:"required"`
+	Password		string	`json:"password" binding:"required"`
 }
 
-// var userList = []user{
-// 	{
-// 		email:        "abc@gmail.com",
-// 		username:     "abc12",
-// 		passwordhash: "hashedme1",
-// 		fullname:     "abc def",
-// 		createDate:   "1631600786",
-// 		role:         1,
-// 	},
-// 	{
-// 		email:        "chekme@example.com",
-// 		username:     "checkme34",
-// 		passwordhash: "hashedme2",
-// 		fullname:     "check me",
-// 		createDate:   "1631600837",
-// 		role:         0,
-// 	},
+// type LoginUserInput struct {
+// 	User	NewUserInput	`gorm:"embedded"`
 // }
+
+type NewUserInput struct {
+	Email			string	`json:"email" binding:"required"`
+	Password		string	`json:"password" binding:"required"`
+}
 
 var db *gorm.DB
 
@@ -83,6 +74,11 @@ func Connect() {
 
 }
 
+func Teardown() {
+	migrator := db.Migrator()
+	migrator.DropTable(&User{})
+}
+
 func FindUserByEmail(email string) (User, error) {
 	var user User
 	err := db.Where("email = ?", email).First(&user).Error
@@ -94,11 +90,29 @@ func FindUserByEmail(email string) (User, error) {
 	return user, nil
 }
 
+func FindUserById(id uint) (User, error) {
+	var user User
+	err := db.Where("ID=?", id).Find(&user).Error
+	if err != nil {
+		return User{}, err
+	}
+	return user, nil
+}
+
 
 // Add user
-func (user *User) AddUser () (*User, error) {	
-	err := db.Create(&user).Error
+func (user *User) BeforeCreate (*gorm.DB) error {
+	passwordHash, err := bcrypt.GenerateFromPassword([]byte(user.Password), bcrypt.DefaultCost)
+	if err != nil {
+		return err
+	}
+	user.Password = string(passwordHash)
+	// user.Username = html.EscapeString(strings.TrimSpace(user.Username))
+	return nil
+}
 
+func (user *User) CreateUser () (*User, error) {	
+	err := db.Create(&user).Error
 	if err != nil {
 		return &User{}, err
 	}
@@ -106,9 +120,9 @@ func (user *User) AddUser () (*User, error) {
 	return user, nil
 }
 
-// Check if the password hash is valid
-func (user *User) ValidatePassHash(pwdhash string) bool {
-	return user.PasswordHash == pwdhash
+// Check if the password is valid
+func (user *User) ValidatePass(password string) error {
+	return bcrypt.CompareHashAndPassword([]byte(user.Password), []byte(password))
 }
 
 

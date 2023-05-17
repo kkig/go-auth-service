@@ -40,13 +40,13 @@ docker network create -d bridge [network name]
 Build and run containers:
 
 ```
-docker-compose up --build
+docker-compose -f [compose-file name] up --build
 ```
 
 or run in detached mode:
 
 ```
-docker-compose up --build -d
+docker-compose -f [compose-file name] up --build -d
 ```
 
 For the intial set up, log into the database engine:
@@ -65,6 +65,12 @@ quit
 ```
 
 ### APIs
+
+In this project, there are endpoints to register and authenticate users. When we authenticate, server issue JWT token.
+
+As security practice, I would recommend adding `scope` to the request to ensure the requester will be authorized to access resources in the scope.
+
+For more information about OAuth 2.0 Auth Code flow, please read [here](https://auth0.com/docs/get-started/apis/scopes/sample-use-cases-scopes-and-claims) for more details.
 
 **auth/register:**
 

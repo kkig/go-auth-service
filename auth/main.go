@@ -3,6 +3,7 @@ package main
 import (
 	"auth_service/lib/controller"
 	"auth_service/lib/data"
+	"auth_service/lib/middleware"
 
 	"os"
 
@@ -35,7 +36,7 @@ func serveApplication() {
 	v1 := router.Group("/auth")
 	{
 		v1.POST("/register", controller.RegisterUser)
-		// v1.POST("/login", controller.LoginHandler)
+		v1.POST("/login", controller.LoginUser)
 	
 		// Test
 		v1.GET("/ping", func(ctx *gin.Context) {
@@ -44,6 +45,11 @@ func serveApplication() {
 			})
 		})		
 	}
+
+	// APIs which require pre-authentication
+	protected := router.Group("/api")
+	protected.Use(middleware.JWTAuthMiddleware())
+	protected.POST("/hello", controller.TestProtected)
 
 	router.Run()
 }

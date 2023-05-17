@@ -1,0 +1,52 @@
+version: '3.8'
+
+services:
+  go-auth-service:
+    env_file: .env.local
+    depends_on:
+      - db
+    build:
+      context: .
+    container_name: rest-server
+    # Name for app container
+    hostname: rest-server
+    networks:
+      - my-net
+    ports:
+      - 80:8080
+    environment:
+      # - HTTP_PORT=${HTTP_PORT}
+      - PGDATABASE=${PGDATABASE:-mydb}
+      - PGHOST=${PGHOST:-db}
+      # - PGOPTIONS=${PGOPTIONS}
+      - PGPORT=${PGPORT:-26257}
+      - PGUSER=${PGUSER:-totoro}
+      - PGPASSWORD=${PGPASSWORD:?database password not set}
+      - TOKEN_TTL=${TOKEN_TTL}
+      - JWT_PRIVATE_KEY=${JWT_PRIVATE_KEY}
+    deploy:
+      restart_policy:
+        condition: on-failure
+
+  db:
+    image: cockroachdb/cockroach:latest-v20.1
+    # Name for volume container
+    container_name: roach1
+    # Name for database container
+    hostname: db
+    networks:
+      - my-net
+    ports:
+      - 26257:26257
+      - 8080:8080
+    volumes:
+      # [volume image name]:[location in image]
+      - roach1:/cockroach/cockroach-data
+    command: start-single-node --insecure
+
+volumes:
+  roach1:
+
+networks:
+  my-net:
+    driver: bridge

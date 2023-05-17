@@ -20,11 +20,11 @@ func RegisterUser(ctx *gin.Context) {
 
 	user := data.User{
 		Email:			input.Email,
-		PasswordHash:	input.PasswordHash,
+		Password:		input.Password,
 		Role:			0,
 	}
 
-	savedUser, err := user.AddUser()
+	savedUser, err := user.CreateUser()
 
 	if err != nil {
 		ctx.JSON(http.StatusBadRequest, gin.H{"status": err.Error()})
