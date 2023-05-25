@@ -22,4 +22,4 @@
 **/.env*
 .DS_Store
 
-**/docker-compose.yml
+go.work*

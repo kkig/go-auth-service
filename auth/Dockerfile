@@ -25,12 +25,13 @@ FROM gcr.io/distroless/base-debian11 AS build-release-stage
 
 # WORKDIR /
 
+# Deploy app binary into lean image
 COPY --from=build-stage /go-auth-service /go-auth-service
 
 # To bind to a TCP port, runtime parameters must be supplied to the docker command.
 # But we can (optionally) document in the Dockerfile what ports
 # the application is going to listen on by default.
-EXPOSE 8080
+EXPOSE ${HTTP_PORT}
 
 USER nonroot:nonroot
 

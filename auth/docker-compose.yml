@@ -2,7 +2,7 @@ version: '3.8'
 
 services:
   go-auth-service:
-    env_file: .env.local
+    env_file: .env
     depends_on:
       - db
     build:
@@ -11,17 +11,16 @@ services:
     # Name for app container
     hostname: rest-server
     networks:
-      - my-net
+      - auth-net
     ports:
       - 80:8080
     environment:
-      # - HTTP_PORT=${HTTP_PORT}
-      - PGDATABASE=${PGDATABASE:-mydb}
-      - PGHOST=${PGHOST:-db}
-      # - PGOPTIONS=${PGOPTIONS}
-      - PGPORT=${PGPORT:-26257}
+      - HTTP_PORT=${HTTP_PORT}
       - PGUSER=${PGUSER:-totoro}
       - PGPASSWORD=${PGPASSWORD:?database password not set}
+      - PGHOST=${PGHOST:-db}
+      - PGPORT=${PGPORT:-26257}
+      - PGDATABASE=${PGDATABASE:-mydb}
       - TOKEN_TTL=${TOKEN_TTL}
       - JWT_PRIVATE_KEY=${JWT_PRIVATE_KEY}
     deploy:
@@ -35,7 +34,7 @@ services:
     # Name for database container
     hostname: db
     networks:
-      - my-net
+      - auth-net
     ports:
       - 26257:26257
       - 8080:8080
@@ -48,5 +47,5 @@ volumes:
   roach1:
 
 networks:
-  my-net:
+  auth-net:
     driver: bridge
