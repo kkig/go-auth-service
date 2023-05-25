@@ -1,9 +1,9 @@
 package main
 
 import (
-	"auth_service/lib/controller"
-	"auth_service/lib/data"
-	"auth_service/lib/middleware"
+	"auth/pkg/controller"
+	"auth/pkg/data"
+	"auth/pkg/middleware"
 
 	"os"
 

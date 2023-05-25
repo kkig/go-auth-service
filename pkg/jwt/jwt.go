@@ -8,7 +8,7 @@ import (
 	"strings"
 	"time"
 
-	"auth_service/lib/data"
+	"auth/pkg/data"
 
 	"github.com/gin-gonic/gin"
 	"github.com/golang-jwt/jwt/v5"

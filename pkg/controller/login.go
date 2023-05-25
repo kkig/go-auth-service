@@ -3,8 +3,8 @@ package controller
 import (
 	"net/http"
 
-	"auth_service/lib/data"
-	"auth_service/lib/jwt"
+	"auth/pkg/data"
+	"auth/pkg/jwt"
 
 	"github.com/gin-gonic/gin"
 )

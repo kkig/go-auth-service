@@ -1,7 +1,7 @@
 package middleware
 
 import (
-	"auth_service/lib/jwt"
+	"auth/pkg/jwt"
 	"net/http"
 
 	"github.com/gin-gonic/gin"

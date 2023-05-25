@@ -1,7 +1,7 @@
 package controller
 
 import (
-	"auth_service/lib/data"
+	"auth/pkg/data"
 	"net/http"
 
 	"github.com/gin-gonic/gin"

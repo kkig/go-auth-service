@@ -37,23 +37,28 @@ Create bridge network:
 docker network create -d bridge [network name]
 ```
 
+#### Docker build/run
+
+Use docker-compose.yml to start database, then service.
+
+Build and run containers:
+
+```
+docker-compose -f [compose-file name] up --build
+```
+
+Or run in detached mode:
+
+```
+docker-compose -f [compose-file name] up --build -d
+```
+
 #### Configure the database in Docker
 
-For the intial set up, start the database engine:
+To use database, you need to configure dabatase.
+Otherwise you may observe errors such as "Authentication error" or "ERROR: relation '[Table name]' does not exist".
 
-```
-docker run -d \
-  --name roach \
-  --hostname db \
-  --network mynet \
-  -p 26257:26257 \
-  -p 8080:8080 \
-  -v roach:/cockroach/cockroach-data \
-  cockroachdb/cockroach:latest-v20.1 start-single-node \
-  --insecure
-```
-
-and log into the database:
+Log into the database:
 
 ```
 docker exec -it [volume container name] ./cockroach sql --insecure
@@ -66,22 +71,6 @@ CREATE DATABASE [db name];
 CREATE USER [user name];
 GRANT ALL ON DATABASE [db name] TO [user name];
 quit
-```
-
-#### Docker build/run
-
-Use docker-compose.yml to start database, then service.
-
-Build and run containers:
-
-```
-docker-compose -f [compose-file name] up --build
-```
-
-or run in detached mode:
-
-```
-docker-compose -f [compose-file name] up --build -d
 ```
 
 ### APIs
